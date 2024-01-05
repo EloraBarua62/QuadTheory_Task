@@ -4,7 +4,7 @@ import banner from '../../public/Image1.png'
 
 const Banner = () => {
     return (
-      <div className="w-full lg:w-[800px] xl:w-[1068px] xl:h-[315px] mx-auto rounded-[28px] md:bg-amber-500 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="w-full lg:w-[800px] xl:w-[1068px] xl:h-[315px] mx-auto rounded-[28px] md:bg-amber-500 grid grid-cols-1 md:grid-cols-2 gap-10 px-2 sm:px-0">
         {/* Title */}
         <div className="w-full flex justify-center items-center">
           <div>
@@ -16,7 +16,7 @@ const Banner = () => {
             </h1>
           </div>
         </div>
-        <div className="w-full h-[250px] sm:h-[350px] md:h-full relative md:static md:overflow-hidden bg-orange-500 md:bg-transparent md:rounded-[28px]">
+        <div className="w-full h-[250px] sm:h-[350px] md:h-full relative md:static md:overflow-hidden bg-orange-500 md:bg-transparent md:rounded-[28px] ">
           <Image
             src={banner}
             alt=""
