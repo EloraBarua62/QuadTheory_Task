@@ -3,12 +3,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const fetchCards = createAsyncThunk("cards/fetchCards" , async() => {
     const url = "http://www.api.technicaltest.quadtheoryltd.com/api/Item?page=1&pageSize=10";
 
-    fetch(url)
-    .then(res => res.json())
-    .then(res => {
-        console.log(res)
-        return res;
-    })
+    let data = await fetch(url)
+    let response =  await data.json()
+    return response.Items;
 });
 
 

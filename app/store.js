@@ -5,12 +5,6 @@ const store = configureStore({
   reducer: {
     cardReducer: cardReducer,
   },
-  // middleware: getDefaultMiddleware => {
-  //     return getDefaultMiddleware({
-  //         serializableCheck: false
-  //     })
-  // },
-  // devTools: true
 });
 
 export default store;
