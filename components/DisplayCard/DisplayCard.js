@@ -84,6 +84,7 @@ const DisplayCard = () => {
         </div>
       </div>
 
+      {/* Popular list */}
       <div className="w-full flex gap-5">
         {cardLists &&
           cardLists
@@ -118,6 +119,7 @@ const DisplayCard = () => {
         </div>
       </div>
 
+      {/* Recommended list */}
       <div className="w-full flex gap-5">
         {cardLists &&
           cardLists
@@ -139,68 +141,7 @@ const DisplayCard = () => {
             ))}
       </div>
 
-      {/* <div
-        onClick={() => setAddItem(!addItem)}
-        className="w-[177px] h-[44px] bg-orange-600 rounded-lg flex justify-center items-center gap-2"
-      >
-        <h1 className=" text-white">Add New Item</h1>
-        <FaPlus className="text-white" />
-      </div> */}
-
-      {/* {addItem && (
-        <div>
-          <input type="checkbox" id="view-modal" class="modal-toggle" />
-          <div class="modal modal-bottom sm:modal-middle">
-            <div class="modal-box bg-orange-400">
-              <label
-                for="update-modal"
-                class="btn btn-sm btn-circle absolute right-2 top-2"
-              >
-                ✕
-              </label>
-              <form onSubmit={handleNewItem}>
-                <h3 class="font-bold text-xl text-white">Enter Name</h3>
-                <input type="text" name="name" id="" />
-                <h3 class="font-bold text-xl text-white">Price</h3>
-                <input type="number" name="price" id="" />
-                <h3 class="font-bold text-xl text-white">
-                  Is it a popular item?
-                </h3>
-                <select name="popular" id="">
-                  <option value="true">True</option>
-                  <option value="false">False</option>
-                </select>
-                <h3 class="font-bold text-xl text-white">
-                  Is it a recommended item?
-                </h3>
-                <select name="recommended" id="">
-                  <option value="true">True</option>
-                  <option value="false">False</option>
-                </select>
-                <h3 class="font-bold text-xl text-white">Enter Image URL</h3>
-                <input type="text" name="image" id="" />
-
-                <div className="flex gap-5">
-                  <input
-                    type="submit"
-                    value="Submit"
-                    className="bg-white hover:bg-orange-500 text-orange-600 hover:text-white w-[60px] rounded "
-                  />
-                </div>
-              </form>
-              <div class="modal-action">
-                  <label
-                    for="view-modal"
-                    class="px-2 rounded btn bg-white hover:bg-orange-500 text-orange-600 hover:text-white"
-                  >
-                    Close
-                  </label>
-                </div>
-            </div>
-          </div>
-        </div>
-      )} */}
-
+      {/* Add Item popup */}
       <div>
         <div
           onClick={() => setOpenModal(true)}
@@ -221,7 +162,8 @@ const DisplayCard = () => {
               <h1 className="text-2xl font-semibold text-orange-500 text-center">
                 Add New Food Item
               </h1>
-              {/* <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" /> */}
+
+              {/* Add item form */}
               <form onSubmit={handleNewItem}>
                 <h3 class="text-sm pt-4 text-gray-600">Enter Name</h3>
                 <input type="text" name="name" id="" />
@@ -258,17 +200,6 @@ const DisplayCard = () => {
                   </div>
                 </div>
               </form>
-              {/* <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this product?
-              </h3>
-              <div className="flex justify-center gap-4">
-                <Button color="failure" onClick={() => setOpenModal(false)}>
-                  {"Yes, I'm sure"}
-                </Button>
-                <Button color="gray" onClick={() => setOpenModal(false)}>
-                  No, cancel
-                </Button>
-              </div> */}
             </div>
           </Modal.Body>
         </Modal>
