@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchCards = createAsyncThunk("cards/fetchCards" , async() => {
     const url =
-      "//www.api.technicaltest.quadtheoryltd.com/api/Item?page=1&pageSize=10";
+      "//api.technicaltest.quadtheoryltd.com/api/Item?page=1&pageSize=10";
 
     let data = await fetch(url)
     let response =  await data.json()
