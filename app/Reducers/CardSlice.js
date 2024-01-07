@@ -20,6 +20,13 @@ const initialCards = {
 export const cardSlice = createSlice({
     name: "cards",
     initialState: initialCards,
+    reducers:{
+        additem: (state, action) => {
+            console.log(action.payload);
+            state.cards = [action.payload,...state.cards]
+            console.log(state.cards);
+        }
+    },
     extraReducers: (builder) => {
 
         builder.addCase(fetchCards.pending , (state) => {
@@ -39,5 +46,7 @@ export const cardSlice = createSlice({
         })
     }
 })
+
+export const {additem} = cardSlice.actions;
 
 export default cardSlice.reducer;

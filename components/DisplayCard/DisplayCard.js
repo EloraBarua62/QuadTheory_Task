@@ -1,185 +1,280 @@
-import { fetchCards } from '@/app/Reducers/CardSlice';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IoIosArrowBack , IoIosArrowForward } from "react-icons/io";
+"use client";
+
+import { additem, fetchCards } from "@/app/Reducers/CardSlice";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 
+import { Button, Modal } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 const DisplayCard = () => {
-    const dispatch = useDispatch();
-    const cardLists = useSelector((state) => state.cardReducer.cards)
-    const [start , setStart] = useState(0);
-    const [end , setEnd] = useState(5);
+  const [openModal, setOpenModal] = useState(false);
 
-    const [addItem, setAddItem] = useState(false)
-    const [start2 , setStart2] = useState(0);
-    const [end2 , setEnd2] = useState(5);
-    useEffect(()=>{
-        dispatch(fetchCards())
-    },[dispatch]);
-    console.log(cardLists)
-    const popular = cardLists
-    console.log('cardLists')
+  const dispatch = useDispatch();
+  const cardLists = useSelector((state) => state.cardReducer.cards);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(5);
 
+  const [addItem, setAddItem] = useState(false);
+  const [start2, setStart2] = useState(0);
+  const [end2, setEnd2] = useState(5);
+  useEffect(() => {
+    dispatch(fetchCards());
+  }, [dispatch]);
+  console.log(cardLists);
 
-    const arrowBack = () => {
-      let keep1 = start , keep2 = end;
-      if(start)
-        {--keep1; --keep2;}
-        setStart(keep1);
-        setEnd(keep2);
+  const arrowBack = () => {
+    let keep1 = start,
+      keep2 = end;
+    if (start) {
+      --keep1;
+      --keep2;
+    }
+    setStart(keep1);
+    setEnd(keep2);
+  };
 
+  const arrowFront = () => {
+    let keep1 = start,
+      keep2 = end;
+    if (end < cardLists.size) {
+      ++keep1;
+      ++keep2;
     }
 
-    const arrowFront = () => {
-       let keep1 = start,keep2 = end;
-      if(end < cardLists.size)
-        {++keep1; ++keep2}
-      
-      setStart(keep1);
-      setEnd(keep2);
-      
-    }
+    setStart(keep1);
+    setEnd(keep2);
+  };
 
-    const handleNewItem = event => {
-      event.preventDefault();
-      const name = event.target.name.value;
-      const price = event.target.price.value;
-      const popular = event.target.popular.value;
-      const recommended = event.target.recommended.value;
-      const image = event.target.image.value;
+  const handleNewItem = (event) => {
+    event.preventDefault();
+    const Name = event.target.name.value;
+    const Price = event.target.price.value;
+    let keep_popular = true;
+    if (event.target.popular.value == "false") keep_popular = false;
+    const IsPopular = keep_popular;
 
-console.log(name,price,popular,image)
-    }
-    
-    
-    return (
-      <div className="w-full lg:w-[800px] xl:w-[1068px] h-full mx-auto mt-[137px] mb-[236px]">
-        <div className="w-full flex justify-between">
-          <h1 className="text-xl text-gray-600">Popular</h1>
-          <div className="flex">
-            <h1 className="text-orange-600">AddMore</h1>
-            <button onClick={arrowBack}>
-              <IoIosArrowBack />
-            </button>
-            <button onClick={arrowFront}>
-              <IoIosArrowForward />
-            </button>
+    let keep_recommended = true;
+    if (event.target.recommended.value == "false") keep_recommended = false;
+    const IsRecommended = keep_recommended;
+
+    const ImageUrl = event.target.image.value;
+
+    console.log(Name, Price, IsPopular, ImageUrl);
+
+    setAddItem(!addItem);
+    setOpenModal(!openModal);
+    dispatch(additem({ Name, Price, IsPopular, IsRecommended, ImageUrl }));
+  };
+
+  return (
+    <div className="w-full lg:w-[800px] xl:w-[1068px] h-full mx-auto mt-[137px] mb-[236px] px-5 lg:px-0">
+      <div className="w-full flex justify-between">
+        <h1 className="text-xl text-gray-600">Popular</h1>
+        <div className="flex">
+          <h1 className="text-orange-600">AddMore</h1>
+          <button onClick={arrowBack}>
+            <IoIosArrowBack />
+          </button>
+          <button onClick={arrowFront}>
+            <IoIosArrowForward />
+          </button>
+        </div>
+      </div>
+
+      <div className="w-full flex gap-5">
+        {cardLists &&
+          cardLists
+            .filter((food) => food.IsPopular == true)
+            .slice(start, end)
+            .map((food, index) => (
+              <div key={index} className="w-[204px] h-[300px]">
+                <div className="w-[204px] h-[271px] rounded-[10px] overflow-hidden">
+                  <Image
+                    src={food.ImageUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    width={204}
+                    height={271}
+                  ></Image>
+                </div>
+                <h1 className="text-center text-gray-600">{food.Name}</h1>
+              </div>
+            ))}
+      </div>
+
+      <div className="w-full flex justify-between mt-10">
+        <h1 className="text-xl text-gray-600">Recommended</h1>
+        <div className="flex">
+          <h1 className="text-orange-600">AddMore</h1>
+          <button onClick={arrowBack}>
+            <IoIosArrowBack />
+          </button>
+          <button onClick={arrowFront}>
+            <IoIosArrowForward />
+          </button>
+        </div>
+      </div>
+
+      <div className="w-full flex gap-5">
+        {cardLists &&
+          cardLists
+            .filter((food) => food.IsRecommended == true)
+            .slice(start, end)
+            .map((food, index) => (
+              <div key={index} className="w-[204px] h-[300px]">
+                <div className="w-[204px] h-[271px] rounded-[10px] overflow-hidden">
+                  <Image
+                    src={food.ImageUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    width={204}
+                    height={271}
+                  ></Image>
+                </div>
+                <h1 className="text-center text-gray-600">{food.Name}</h1>
+              </div>
+            ))}
+      </div>
+
+      {/* <div
+        onClick={() => setAddItem(!addItem)}
+        className="w-[177px] h-[44px] bg-orange-600 rounded-lg flex justify-center items-center gap-2"
+      >
+        <h1 className=" text-white">Add New Item</h1>
+        <FaPlus className="text-white" />
+      </div> */}
+
+      {/* {addItem && (
+        <div>
+          <input type="checkbox" id="view-modal" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box bg-orange-400">
+              <label
+                for="update-modal"
+                class="btn btn-sm btn-circle absolute right-2 top-2"
+              >
+                ✕
+              </label>
+              <form onSubmit={handleNewItem}>
+                <h3 class="font-bold text-xl text-white">Enter Name</h3>
+                <input type="text" name="name" id="" />
+                <h3 class="font-bold text-xl text-white">Price</h3>
+                <input type="number" name="price" id="" />
+                <h3 class="font-bold text-xl text-white">
+                  Is it a popular item?
+                </h3>
+                <select name="popular" id="">
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+                <h3 class="font-bold text-xl text-white">
+                  Is it a recommended item?
+                </h3>
+                <select name="recommended" id="">
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+                <h3 class="font-bold text-xl text-white">Enter Image URL</h3>
+                <input type="text" name="image" id="" />
+
+                <div className="flex gap-5">
+                  <input
+                    type="submit"
+                    value="Submit"
+                    className="bg-white hover:bg-orange-500 text-orange-600 hover:text-white w-[60px] rounded "
+                  />
+                </div>
+              </form>
+              <div class="modal-action">
+                  <label
+                    for="view-modal"
+                    class="px-2 rounded btn bg-white hover:bg-orange-500 text-orange-600 hover:text-white"
+                  >
+                    Close
+                  </label>
+                </div>
+            </div>
           </div>
         </div>
+      )} */}
 
-        <div className="w-full flex gap-5">
-          {cardLists &&
-            cardLists
-              .filter((food) => food.IsPopular == true)
-              .slice(start, end)
-              .map((food, index) => (
-                <div key={index} className="w-[204px] h-[300px]">
-                  <div className="w-[204px] h-[271px] rounded-[10px] overflow-hidden">
-                    <Image
-                      src={food.ImageUrl}
-                      alt=""
-                      className="w-full h-full object-cover"
-                      width={204}
-                      height={271}
-                    ></Image>
-                  </div>
-                  <h1 className="text-center text-gray-600">{food.Name}</h1>
-                </div>
-              ))}
-        </div>
-
-        <div className="w-full flex justify-between mt-10">
-          <h1 className="text-xl text-gray-600">Recommended</h1>
-          <div className="flex">
-            <h1 className="text-orange-600">AddMore</h1>
-            <button onClick={arrowBack}>
-              <IoIosArrowBack />
-            </button>
-            <button onClick={arrowFront}>
-              <IoIosArrowForward />
-            </button>
-          </div>
-        </div>
-
-        <div className="w-full flex gap-5">
-          {cardLists &&
-            cardLists
-              .filter((food) => food.IsRecommended == true)
-              .slice(start, end)
-              .map((food, index) => (
-                <div key={index} className="w-[204px] h-[300px]">
-                  <div className="w-[204px] h-[271px] rounded-[10px] overflow-hidden">
-                    <Image
-                      src={food.ImageUrl}
-                      alt=""
-                      className="w-full h-full object-cover"
-                      width={204}
-                      height={271}
-                    ></Image>
-                  </div>
-                  <h1 className="text-center text-gray-600">{food.Name}</h1>
-                </div>
-              ))}
-        </div>
-
+      <div>
         <div
-          onClick={() => setAddItem(!addItem)}
-          className="w-[177px] h-[44px] bg-orange-600 md:rounded-[15px] flex justify-center items-center gap-2"
+          onClick={() => setOpenModal(true)}
+          className="w-[177px] h-[44px] bg-orange-600 rounded-lg flex justify-center items-center gap-2 cursor-pointer"
         >
           <h1 className=" text-white">Add New Item</h1>
           <FaPlus className="text-white" />
         </div>
+        <Modal
+          show={openModal}
+          size="md"
+          onClose={() => setOpenModal(false)}
+          popup
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div>
+              <h1 className="text-2xl font-semibold text-orange-500 text-center">
+                Add New Food Item
+              </h1>
+              {/* <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" /> */}
+              <form onSubmit={handleNewItem}>
+                <h3 class="text-sm pt-4 text-gray-600">Enter Name</h3>
+                <input type="text" name="name" id="" />
+                <h3 class="text-sm pt-4 text-gray-600">Price</h3>
+                <input type="number" name="price" id="" />
+                <h3 class="text-sm pt-4 text-gray-600">
+                  Is it a popular item?
+                </h3>
+                <select name="popular" id="">
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+                <h3 class="text-sm pt-4 text-gray-600">
+                  Is it a recommended item?
+                </h3>
+                <select name="recommended" id="">
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+                <h3 class="text-sm pt-4 text-gray-600">Enter Image URL</h3>
+                <input type="text" name="image" id="" />
 
-        {addItem && (
-          <div>
-            {/* <input type="checkbox" id="view-modal" class="modal-toggle" /> */}
-            <div class="modal modal-bottom sm:modal-middle">
-              <div class="modal-box bg-orange-400">
-                <form onSubmit={handleNewItem}>
-                  <h3 class="font-bold text-xl text-white">Enter Name</h3>
-                  <input type="text" name="name" id="" />
-                  <h3 class="font-bold text-xl text-white">Price</h3>
-                  <input type="number" name="price" id="" />
-                  <h3 class="font-bold text-xl text-white">
-                    Is it a popular item?
-                  </h3>
-                  <select name="popular" id="">
-                    <option value="popular_true">True</option>
-                    <option value="popular_false">False</option>
-                  </select>
-                  <h3 class="font-bold text-xl text-white">
-                    Is it a recommended item?
-                  </h3>
-                  <select name="recommended" id="">
-                    <option value="recommended_true">True</option>
-                    <option value="recommended_false">False</option>
-                  </select>
-                  <h3 class="font-bold text-xl text-white">Enter Image URL</h3>
-                  <input type="text" name="image" id="" />
-
-                  <div className="flex gap-5">
-                    <input
-                      type="submit"
-                      value="Submit"
-                      className="bg-white hover:bg-orange-500 text-orange-600 hover:text-white w-[60px] rounded "
-                    />
-                    <div class="modal-action">
-                      <label
-                        for="view-modal"
-                        class="px-2 rounded btn bg-white hover:bg-orange-500 text-orange-600 hover:text-white"
-                      >
-                        Close
-                      </label>
-                    </div>
+                <div className="flex justify_center gap-5 pt-10">
+                  <input
+                    type="submit"
+                    value="Submit"
+                    className="bg-orange-500 text-white font-semibold rounded cursor-pointer px-3 py-2"
+                  />
+                  <div
+                    className="bg-red-600 text-white font-semibold  px-3 py-2 rounded cursor-pointer"
+                    onClick={() => setOpenModal(false)}
+                  >
+                    Cancel
                   </div>
-                </form>
-              </div>
+                </div>
+              </form>
+              {/* <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete this product?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <Button color="failure" onClick={() => setOpenModal(false)}>
+                  {"Yes, I'm sure"}
+                </Button>
+                <Button color="gray" onClick={() => setOpenModal(false)}>
+                  No, cancel
+                </Button>
+              </div> */}
             </div>
-          </div>
-        )}
+          </Modal.Body>
+        </Modal>
       </div>
-    );
+    </div>
+  );
 };
 
 export default DisplayCard;
