@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+
+const webpack = require("webpack");
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -15,5 +17,12 @@ module.exports = {
       // },
     },
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [
+    require("flowbite/plugin"),
+    // new webpack.ProvidePlugin({
+    //   $: "jquery",
+    //   jQuery: "jquery",
+    //   "window.jQuery": "jquery",
+    // }),
+  ],
 };
