@@ -4,7 +4,7 @@ import Footer from './Shared/Footer/Footer';
 
 const Layout = ({children}) => {
     return (
-      <div className="w-full h-screen bg-gray-100">
+      <div>
         <Header />
         {children}
         <Footer />
